@@ -24,9 +24,11 @@ io.on("connection", (socket) => {
     if (interval) {
         clearInterval(interval);
     }
+    socket.on('setup', function (config) {
+        console.log("configis : " + JSON.stringify(config));
+    });
     interval = setInterval(() => getApiAndEmit(socket), 1000);
     socket.on("disconnect", (config) => {
-        console.log("configis : " + JSON.stringify(config));
         console.log("Client disconnected");
         clearInterval(interval);
     });
