@@ -1,7 +1,7 @@
 const express = require("express");
 const http = require("http");
-const socketIo = require("socket.io");
 const port = process.env.PORT || 4001;
+const socketIo = require("socket.io");
 const index = require("./routes/index");
 var cors = require("cors");
 
@@ -10,8 +10,12 @@ app.use(cors());
 app.use(index);
 
 const server = http.createServer(app);
-
-const io = socketIo(server);
+const io = socketIo(server, {
+    cors: {
+        origin: "*",
+        methods: ["GET", "POST"]
+    }
+});
 
 let interval;
 
