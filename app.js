@@ -19,7 +19,7 @@ const io = socketIo(server, {
 });
 
 const proConfig = {
-    connectionString: "postgres://urblfooqaxzsvi:d81f89e197a21d0270f815c886781fe451eaa4af6cdf4f696b2a38852c238a05@ec2-52-45-183-77.compute-1.amazonaws.com:5432/d6ikpi8if3aso7",
+    connectionString: process.env.DATABASE_URL,
     ssl: {
         rejectUnauthorized: false
     }
