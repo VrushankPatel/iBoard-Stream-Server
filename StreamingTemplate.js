@@ -24,25 +24,35 @@ const proConfig = {
         rejectUnauthorized: false
     }
 }
+const pool = new Pool(proConfig);
+let interval;
 io.on("connection", (socket) => {
-    const pool = new Pool(proConfig);
-    console.log("New client connected");
+    console.log("New client connected" + socket);
+    if (interval) {
+        clearInterval(interval);
+    }
     socket.on("getUniqueId", (data) => {
         let query = `SELECT * FROM i_board WHERE Board_id='${data}';`
 
         pool.query(query, (err, res) => {
             if (res) {
-                socket.emit("respondData", res.rows[0].board_text);
+                socket.emit("FromAPI", res.rows[0].board_text);
             } else {
-                socket.emit("respondData", "Error Occured 😢.");
+                socket.emit("FromAPI", "Error Occured 😢.");
             }
         })
+        // pool.end();
     });
+    interval = setInterval(() => getApiAndEmit(socket), 1000);
     socket.on("disconnect", (config) => {
-        pool.end();
         console.log("Client disconnected");
+        clearInterval(interval);
     });
 });
 
+const getApiAndEmit = socket => {
+    const response = new Date();
+    socket.emit("respondData", response);
+};
 
 server.listen(port, () => console.log(`Listening on port ${port}`));
