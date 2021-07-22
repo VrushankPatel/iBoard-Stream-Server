@@ -32,7 +32,8 @@ io.on("connection", (socket) => {
 
         pool.query(query, (err, res) => {
             if (res) {
-                socket.emit("respondData", res.rows[0].board_text);
+                if (res.rows.length > 0) socket.emit("respondData", res.rows[0].board_text);
+                else socket.emit("respondData", "There is No Data inserted for this id.");
             } else {
                 socket.emit("respondData", "Error Occured 😢.");
             }
