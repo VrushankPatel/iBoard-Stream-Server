@@ -28,8 +28,7 @@ io.on("connection", (socket) => {
     const pool = new Pool(proConfig);
     console.log("New client connected");
     socket.on("getUniqueId", (data) => {
-        let query = `SELECT * FROM i_board WHERE Board_id='${data}';`
-
+        let query = `SELECT * FROM i_board WHERE Board_id='${data.toUpperCase()}';`;
         pool.query(query, (err, res) => {
             if (res) {
                 if (res.rows.length > 0) socket.emit("respondData", res.rows[0].board_text);
