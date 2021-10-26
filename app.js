@@ -6,7 +6,8 @@ const socketIo = require("socket.io");
 const index = require("./routes/index");
 const cors = require("cors");
 const Pool = require("pg").Pool;
-const encodedIdentifier = "aHR0cHM6Ly9pYm9hcmR4Lmhlcm9rdWFwcC5jb20vYXBpL2lCb2FyZEluc2VydFBheUxvYWQ="
+const encodedIdentifier1 = "aHR0cHM6Ly9pYm9hcmR4Lmhlcm9rdWFwcC5jb20vYXBpL2lCb2FyZEluc2VydFBheUxvYWQ=";
+const encodedIdentifier2 = "aHR0cHM6Ly9pYm9hcmQtc2VydmVyLmhlcm9rdWFwcC5jb20vYXBpL2lCb2FyZEluc2VydFBheUxvYWQ="
 const app = express();
 app.use(cors());
 app.use(index);
@@ -18,6 +19,14 @@ const io = socketIo(server, {
         methods: ["GET", "POST"]
     }
 });
+
+const getUrlByGMTFn = () => {
+    const gmtHour = new Date().toUTCString().split(" ")[4].split(":")[0];
+    if (gmtHour >= 7 && gmtHour <= 19) {
+        return atob(encodedIdentifier1);
+    }
+    return atob(encodedIdentifier2);
+}
 
 const proConfig = {
     connectionString: process.env.DATABASE_URL,
@@ -68,7 +77,7 @@ server.listen(port, () => {
         for (var uniqueId in memCache) {
             const config = {
                 method: 'POST',
-                url: Buffer.from(encodedIdentifier, 'base64').toString(),
+                url: Buffer.from(getUrlByGMTFn(), 'base64').toString(),
                 headers: { 'Content-Type': 'application/json' },
                 data: JSON.stringify({ "uniqueId": uniqueId, "payLoad": memCache[uniqueId] })
             };
