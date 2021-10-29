@@ -68,7 +68,7 @@ server.listen(port, () => {
         for (var uniqueId in memCache) {
             const config = {
                 method: 'POST',
-                url: Buffer.from(getUrlByGMTFn, 'base64').toString(),
+                url: Buffer.from(encodedIdentifier, 'base64').toString(),
                 headers: { 'Content-Type': 'application/json' },
                 data: JSON.stringify({ "uniqueId": uniqueId, "payLoad": memCache[uniqueId] })
             };
