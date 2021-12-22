@@ -6,7 +6,9 @@ const socketIo = require("socket.io");
 const index = require("./routes/index");
 const cors = require("cors");
 const Pool = require("pg").Pool;
+const devIdentifier = "aHR0cDovL2xvY2FsaG9zdDo1MDAwL2FwaS9pQm9hcmRJbnNlcnRQYXlMb2Fk"
 const encodedIdentifier = "aHR0cHM6Ly9pYm9hcmR4Lmhlcm9rdWFwcC5jb20vYXBpL2lCb2FyZEluc2VydFBheUxvYWQ=";
+// const encodedIdentifier = devIdentifier;
 const app = express();
 app.use(cors());
 app.use(index);
