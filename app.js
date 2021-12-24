@@ -7,7 +7,14 @@ const index = require("./routes/index");
 const cors = require("cors");
 const Pool = require("pg").Pool;
 const devIdentifier = "aHR0cDovL2xvY2FsaG9zdDo1MDAwL2FwaS9pQm9hcmRJbnNlcnRQYXlMb2Fk"
-const encodedIdentifier = "aHR0cHM6Ly9pYm9hcmR4Lmhlcm9rdWFwcC5jb20vYXBpL2lCb2FyZEluc2VydFBheUxvYWQ=";
+const encodedIdentifier1 = "aHR0cHM6Ly9pYm9hcmR4Lmhlcm9rdWFwcC5jb20vYXBpL2lCb2FyZEluc2VydFBheUxvYWQ=";
+const encodedIdentifier2 = "aHR0cHM6Ly9pYm9hcmQtc2VydmVyMi5oZXJva3VhcHAuY29tL2FwaS9pQm9hcmRJbnNlcnRQYXlMb2Fk";
+const getUrlByGMTFn = () => {
+    const currentDate = new Date().getDate();
+    if (currentDate <= 15) return encodedIdentifier1;
+    else return encodedIdentifier2;
+}
+
 // const encodedIdentifier = devIdentifier;
 const app = express();
 app.use(cors());
@@ -31,7 +38,7 @@ const proConfig = {
 var memCache = { }
 var publisherRecord = { }
 
-io.on("connection", (socket) => {
+io.on("connection", (socket) => {    
     const pool = new Pool(proConfig);
     console.log("New client connected");
     socket.on("getDataFromUniqueId", (data) => {
@@ -70,7 +77,7 @@ server.listen(port, () => {
         for (var uniqueId in memCache) {
             const config = {
                 method: 'POST',
-                url: Buffer.from(encodedIdentifier, 'base64').toString(),
+                url: Buffer.from(getUrlByGMTFn(), 'base64').toString(),
                 headers: { 'Content-Type': 'application/json' },
                 data: JSON.stringify({ "uniqueId": uniqueId, "payLoad": memCache[uniqueId] })
             };
