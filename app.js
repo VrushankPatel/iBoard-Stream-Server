@@ -38,8 +38,7 @@ const proConfig = {
 var memCache = { }
 var publisherRecord = { }
 
-io.on("connection", (socket) => {
-    axios.get(getUrlByGMTFn());
+io.on("connection", (socket) => {    
     const pool = new Pool(proConfig);
     console.log("New client connected");
     socket.on("getDataFromUniqueId", (data) => {
