@@ -28,18 +28,22 @@ const io = socketIo(server, {
     }
 });
 
-const proConfig = {
-    connectionString: process.env.DATABASE_URL,
-    ssl: {
-        rejectUnauthorized: false
-    }
+const getProConfig = () => {
+    const currentDate = new Date().getDate();        
+    const proConfig = {
+        connectionString: currentDate <= 15 ? process.env.DATABASE_URL : process.env.DATABASE_URL2,
+        ssl: {
+            rejectUnauthorized: false
+        }
+    };
+    return proConfig;
 }
 
 var memCache = { }
 var publisherRecord = { }
 
 io.on("connection", (socket) => {    
-    const pool = new Pool(proConfig);
+    const pool = new Pool(getProConfig());
     console.log("New client connected");
     socket.on("getDataFromUniqueId", (data) => {
         let query = `SELECT * FROM i_board WHERE Board_id='${data.toUpperCase()}';`;
