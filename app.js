@@ -6,7 +6,7 @@ const socketIo = require("socket.io");
 const index = require("./routes/index");
 const cors = require("cors");
 const Pool = require("pg").Pool;
-// const devIdentifier = "aHR0cDovL2xvY2FsaG9zdDo1MDAwL2FwaS9pQm9hcmRJbnNlcnRQYXlMb2Fk"
+const devIdentifier = "aHR0cDovL2xvY2FsaG9zdDo1MDAwL2FwaS9pQm9hcmRJbnNlcnRQYXlMb2Fk"
 
 const encodedIdentifier1 = "aHR0cHM6Ly9pYm9hcmR4Lmhlcm9rdWFwcC5jb20vYXBpL2lCb2FyZEluc2VydFBheUxvYWQ=";
 const encodedIdentifier2 = "aHR0cHM6Ly9pYm9hcmQtc2VydmVyMi5oZXJva3VhcHAuY29tL2FwaS9pQm9hcmRJbnNlcnRQYXlMb2Fk";
@@ -17,7 +17,7 @@ const getUrlByGMTFn = () => {
     else return encodedIdentifier2;
 }
 
-// const encodedIdentifier = devIdentifier;
+const encodedIdentifier = devIdentifier;
 const app = express();
 app.use(cors());
 app.use(index);
@@ -83,8 +83,7 @@ server.listen(port, () => {
                 headers: { 'Content-Type': 'application/json' },
                 data: JSON.stringify({ "uniqueId": uniqueId, "payLoad": memCache[uniqueId] })
             };
-            axios(config)
-                .then((response) => { })
+            axios(config)                
                 .catch((error) => {
                     console.log("Error occured");
                 });
